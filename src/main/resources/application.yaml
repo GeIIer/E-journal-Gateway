@@ -7,8 +7,7 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      httpclient:
-        max-header-size: 2MB
+
 server:
   port: 8080
 
