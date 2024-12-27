@@ -12,6 +12,7 @@
     <artifactId>E-journal-Gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>E-journal-Gateway</name>
+    <packaging>war</packaging>
     <description>E-journal-Gateway</description>
     <url/>
     <licenses>
@@ -76,14 +77,9 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </path>
-                    </annotationProcessorPaths>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
         </plugins>
