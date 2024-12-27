@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: e-journal-gateway
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+      instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}:${server.port}
+  instance:
+    preferIpAddress: true
