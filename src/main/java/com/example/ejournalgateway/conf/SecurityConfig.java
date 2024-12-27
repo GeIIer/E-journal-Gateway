@@ -21,6 +21,10 @@ public class SecurityConfig {
                     corsConfiguration.setAllowCredentials(true);
                     return corsConfiguration;
                 }))
+                .authorizeExchange(authorizeExchangeSpec -> {
+                    authorizeExchangeSpec.pathMatchers("/**").permitAll();
+                    authorizeExchangeSpec.anyExchange().permitAll();
+                })
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
