@@ -6,7 +6,7 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -34,10 +34,7 @@ public class DiscoveryConfig {
     @Bean
     public RouterFunction<ServerResponse> staticResourceRouter() {
         return RouterFunctions
-                .resources("/**", new ClassPathResource("static/"))
-                .andRoute(req -> true, request ->
-                        ServerResponse.ok().bodyValue(
-                                new ClassPathResource("static/index.html")));
+                .resources("/**", new FileSystemResource("static/"));
     }
 
 }
