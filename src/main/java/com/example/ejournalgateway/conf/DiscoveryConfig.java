@@ -6,12 +6,16 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
 @EnableDiscoveryClient
 public class DiscoveryConfig {
 
-    @Value("${FRONTEND_URL:http://127.0.0.1:4200}")
+    @Value("${FRONTEND_URL:http://localhost:8080}")
     private String frontendUrl;
 
     @Bean
@@ -24,11 +28,16 @@ public class DiscoveryConfig {
                         .uri("lb://e-journal-auth"))
                 .route("e-journal-back", r -> r.path("/api/v1/journal/**")
                         .uri("lb://e-journal-back"))
-                .route("frontend-service", r -> r.path("/**")
-                        .uri(frontendUrl))
-                .route("frontend-service", r -> r.path("/static/**")
-                        .uri("%s/static".formatted(frontendUrl)))
                 .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> staticResourceRouter() {
+        return RouterFunctions
+                .resources("/**", new ClassPathResource("static/"))
+                .andRoute(req -> true, request ->
+                        ServerResponse.ok().bodyValue(
+                                new ClassPathResource("static/index.html")));
     }
 
 }
