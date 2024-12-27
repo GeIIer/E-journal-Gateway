@@ -34,7 +34,7 @@ public class DiscoveryConfig {
     @Bean
     public RouterFunction<ServerResponse> staticResourceRouter() {
         return RouterFunctions
-                .resources("/**", new FileSystemResource("./src/main/resources/static"));
+                .resources("/**", new FileSystemResource("/src/main/resources/static/"));
     }
 
 }
