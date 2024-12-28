@@ -2,7 +2,29 @@ spring:
   application:
     name: e-journal-gateway
   cloud:
+    loadbalancer:
+      retry:
+        enabled: true
     gateway:
+      routes:
+        - id: e-journal-auth
+          uri: lb://e-journal-auth
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - RewritePath=/api/v1/auth/(?<segment>.*), /${segment}
+
+        - id: e-journal-back
+          uri: lb://e-journal-back
+          predicates:
+            - Path=/api/v1/journal/**
+          filters:
+            - RewritePath=/api/v1/journal/(?<segment>.*), /${segment}
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 10s
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       metrics:
         enabled: true
       discovery:
@@ -26,4 +48,21 @@ eureka:
 
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway: TRACE
+    reactor.netty: DEBUG
+    org.springframework.web.reactive: DEBUG
+    org.springframework.cloud.gateway.handler.RoutePredicateHandlerMapping: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true

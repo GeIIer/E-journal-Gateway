@@ -1,33 +1,36 @@
 package com.example.ejournalgateway.conf;
 
-import org.springframework.beans.factory.annotation.Value;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
+import java.time.Duration;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableDiscoveryClient
 public class DiscoveryConfig {
-    @Value("${FRONTEND_URL:http://localhost:8080}")
-    private String frontendUrl;
-
     @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        if (frontendUrl.endsWith("/")) {
-            frontendUrl = frontendUrl.substring(0, frontendUrl.length()-1);
-        }
-        return builder.routes()
-                .route("e-journal-auth", r -> r.path("/api/v1/auth/**")
-                        .uri("http://e-journal-auth"))
-                .route("e-journal-back", r -> r.path("/api/v1/journal/**")
-                        .uri("http://e-journal-back"))
+    public WebClient webClient() {
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                .responseTimeout(Duration.ofMillis(5000))
+                .doOnConnected(conn -> conn
+                        .addHandlerLast(new ReadTimeoutHandler(5, TimeUnit.SECONDS))
+                        .addHandlerLast(new WriteTimeoutHandler(5, TimeUnit.SECONDS)));
+
+        return WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
 
