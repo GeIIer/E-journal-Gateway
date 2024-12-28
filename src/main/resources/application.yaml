@@ -3,10 +3,15 @@ spring:
     name: e-journal-gateway
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      routes:
+        - id: E-JOURNAL-AUTH
+          uri: lb://E-JOURNAL-AUTH
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: E-JOURNAL-BACK
+          uri: lb://E-JOURNAL-BACK
+          predicates:
+            - Path=/api/v1/journal/**
 
 server:
   port: 8080
