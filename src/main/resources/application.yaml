@@ -12,11 +12,14 @@ spring:
           uri: lb://e-journal-back
           predicates:
             - Path=/api/v1/journal/**
+      discovery:
+        locator:
+          enabled: true
 
 server:
   port: 8080
-  servlet:
-    context-path: /
+  ssl:
+    enabled: false
 
 eureka:
   client:
