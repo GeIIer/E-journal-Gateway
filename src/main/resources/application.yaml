@@ -3,15 +3,6 @@ spring:
     name: e-journal-gateway
   cloud:
     gateway:
-      routes:
-        - id: E-JOURNAL-AUTH
-          uri: lb://e-journal-auth
-          predicates:
-            - Path=/api/v1/auth/**
-        - id: E-JOURNAL-BACK
-          uri: lb://e-journal-back
-          predicates:
-            - Path=/api/v1/journal/**
       discovery:
         locator:
           enabled: true
@@ -26,6 +17,8 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
       instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}:${server.port}
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     preferIpAddress: true
 
