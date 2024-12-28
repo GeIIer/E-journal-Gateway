@@ -30,7 +30,6 @@ public class DiscoveryConfig {
                 .route("e-journal-back", r -> r.path("/api/v1/journal/**")
                         .uri("lb://e-journal-back"))
                 .route(r -> r.path("/**")
-                        .filters(f -> f.setPath("/{segment}"))
                         .uri("classpath:/static/"))
                 .build();
     }
