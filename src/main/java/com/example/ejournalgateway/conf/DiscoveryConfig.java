@@ -16,10 +16,10 @@ import java.util.Arrays;
 @Configuration
 @EnableDiscoveryClient
 public class DiscoveryConfig {
-    @Bean
-    public RouterFunction<ServerResponse> staticResourceRouter() {
-        return RouterFunctions.resources("/**", new ClassPathResource("static/"));
-    }
+//    @Bean
+//    public RouterFunction<ServerResponse> staticResourceRouter() {
+//        return RouterFunctions.resources("/**", new ClassPathResource("static/"));
+//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
