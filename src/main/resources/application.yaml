@@ -20,3 +20,7 @@ eureka:
       instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}:${server.port}
   instance:
     preferIpAddress: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
