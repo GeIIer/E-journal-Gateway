@@ -3,9 +3,12 @@ spring:
     name: e-journal-gateway
   cloud:
     gateway:
+      metrics:
+        enabled: true
       discovery:
         locator:
           enabled: true
+          lower-case-service-id: true
 
 server:
   port: 8080

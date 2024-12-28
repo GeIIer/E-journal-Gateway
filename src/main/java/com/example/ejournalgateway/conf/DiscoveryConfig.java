@@ -35,9 +35,9 @@ public class DiscoveryConfig {
         }
         return builder.routes()
                 .route("e-journal-auth", r -> r.path("/api/v1/auth/**")
-                        .uri("lb://e-journal-auth"))
+                        .uri("http://e-journal-auth"))
                 .route("e-journal-back", r -> r.path("/api/v1/journal/**")
-                        .uri("lb://e-journal-back"))
+                        .uri("http://e-journal-back"))
 //                .route("frontend-service", r -> r.path("/**")
 //                        .uri(frontendUrl))
 //                .route("frontend-service", r -> r.path("/static/**")
