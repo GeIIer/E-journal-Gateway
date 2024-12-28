@@ -5,11 +5,11 @@ spring:
     gateway:
       routes:
         - id: E-JOURNAL-AUTH
-          uri: lb://E-JOURNAL-AUTH
+          uri: lb://e-journal-auth
           predicates:
             - Path=/api/v1/auth/**
         - id: E-JOURNAL-BACK
-          uri: lb://E-JOURNAL-BACK
+          uri: lb://e-journal-back
           predicates:
             - Path=/api/v1/journal/**
 
