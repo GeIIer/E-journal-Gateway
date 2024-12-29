@@ -6,15 +6,11 @@ import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
@@ -46,11 +42,5 @@ public class DiscoveryConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> staticResourceRouter() {
-        return RouterFunctions
-                .resources("/**", new ClassPathResource("static/"));
     }
 }

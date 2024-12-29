@@ -20,6 +20,13 @@ spring:
             - Path=/api/v1/journal/**
           filters:
             - RewritePath=/api/v1/journal/(?<segment>.*), /${segment}
+
+        - id: spa_route
+          uri: no://op
+          predicates:
+            - Path=/**
+          filters:
+            - SetPath=/index.html
       httpclient:
         connect-timeout: 5000
         response-timeout: 10s
