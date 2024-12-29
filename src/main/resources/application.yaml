@@ -7,17 +7,13 @@ spring:
         enabled: true
     gateway:
       routes:
-        - id: static_resources
-          uri: forward:/
-          predicates:
-            - Path=/static/**,/*.ico,/*.js,/*.css,/*.html
-
         - id: e-journal-auth
           uri: lb://e-journal-auth
           predicates:
             - Path=/api/v1/auth/**
           filters:
             - RewritePath=/api/v1/auth/(?<segment>.*), /${segment}
+          order: 1
 
         - id: e-journal-back
           uri: lb://e-journal-back
@@ -25,14 +21,25 @@ spring:
             - Path=/api/v1/journal/**
           filters:
             - RewritePath=/api/v1/journal/(?<segment>.*), /${segment}
+          order: 2
 
-        - id: spa_route
+        # Статические ресурсы
+        - id: static_resources
+          uri: forward:/static
+          predicates:
+            - Path=/static/**
+          order: 3
+
+        # Маршрут для SPA (должен быть последним)
+        - id: spa_fallback
           uri: forward:/index.html
           predicates:
             - Path=/**
+          order: 4
       httpclient:
         connect-timeout: 5000
         response-timeout: 10s
+        max-header-size: 2MB
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
       metrics:
@@ -46,6 +53,9 @@ server:
   port: 8080
   ssl:
     enabled: false
+  max-http-request-header-size: 2MB
+  netty:
+    max-initial-line-length: 16KB
 
 eureka:
   client:
