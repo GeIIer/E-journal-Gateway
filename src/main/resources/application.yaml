@@ -7,6 +7,11 @@ spring:
         enabled: true
     gateway:
       routes:
+        - id: static_resources
+          uri: forward:/
+          predicates:
+            - Path=/static/**,/*.ico,/*.js,/*.css,/*.html
+
         - id: e-journal-auth
           uri: lb://e-journal-auth
           predicates:
@@ -22,11 +27,9 @@ spring:
             - RewritePath=/api/v1/journal/(?<segment>.*), /${segment}
 
         - id: spa_route
-          uri: no://op
+          uri: forward:/index.html
           predicates:
             - Path=/**
-          filters:
-            - SetPath=/index.html
       httpclient:
         connect-timeout: 5000
         response-timeout: 10s
