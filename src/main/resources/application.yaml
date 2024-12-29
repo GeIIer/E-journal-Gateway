@@ -23,19 +23,27 @@ spring:
             - RewritePath=/api/v1/journal/(?<segment>.*), /${segment}
           order: 2
 
+        - id: a-node-service
+          uri: lb://a-node-service
+          predicates:
+            - Path=/api/v1/nodejs/**
+          filters:
+            - RewritePath=/api/v1/nodejs/(?<segment>.*), /${segment}
+          order: 3
+
         # Статические ресурсы
         - id: static_resources
           uri: forward:/static
           predicates:
             - Path=/static/**
-          order: 3
+          order: 4
 
         # Маршрут для SPA (должен быть последним)
         - id: spa_fallback
           uri: forward:/index.html
           predicates:
             - Path=/**
-          order: 4
+          order: 5
       httpclient:
         connect-timeout: 5000
         response-timeout: 10s
